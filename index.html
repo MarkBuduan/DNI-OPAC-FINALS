@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPAC</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <form onsubmit="event.preventDefault(); onFormSubmit()" autocomplete="off">
+                    <div>
+                        <label>Book Name</label>
+                        <input type="text" name="bookName" id="bookName">
+                    </div>
+                    <div>
+                        <label>Genre</label>
+                        <select name="bookGenre" id="bookGenre">
+                            <option value="Fiction">Fiction</option>
+                            <option value="Filipiniana">Filipiniana</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Arts">Art</option>
+                            <option value="Humanities">Language</option>
+                            <option value="History">History</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Condition</label>
+                        <select name="bookCondition" id="bookCondition">
+                            <option value="New">Newly Acquired</option>
+                            <option value="Repair">Needs Repairing</option>
+                        </select>
+                    </div>
+                    <div class="from-action-buttons">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </td>
+            <td>
+                <table class="list" id="bookList">
+                    <thead>
+                        <th>Book Name</th>
+                        <th>Genre</th>
+                        <th>Condition</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <h2>Newly Acquired Books: <h2 id="newBooks">0</h2></h2>
+    <h2>Books Need Reparing: <h2 id="needRepair">0</h2></h2>
+    <script src="script.js"></script>
+</body>
+</html>
