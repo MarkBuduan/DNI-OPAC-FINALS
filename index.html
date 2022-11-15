@@ -4,59 +4,171 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPAC</title>
+    <title>Online Public Access Catalog</title>
+    <!--cDN for Material Icons-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
+    <!--Stylesheet-->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <table>
-        <tr>
-            <td>
-                <form onsubmit="event.preventDefault(); onFormSubmit()" autocomplete="off">
-                    <div>
-                        <label>Book Name</label>
+    <div class="container">
+        <!--MAIN-->
+        <main>
+            <h1 class="main-heading">Online Public Access Catalog</h1>
+            <!--FIRST ROW-->
+            <div class="book-tally-container">
+                <div class="books-total-container">
+                    <div class="overall-total">
+                        <h3 class="heading-total" >Total Books</h3>
+                        <h1 class="value-total">0</h1>
+                    </div>
+                </div>
+                <div class="fiction-total-container">
+                    <div class="fiction-total">
+                        <h3>Fiction</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="arts-total-container">
+                    <div class="arts-total">
+                        <h3>Arts</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="sciences-total-container">
+                    <div class="sciences-total">
+                        <h3>Sciences</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="filipiniana-total-container">
+                    <div class="filipiniana-total">
+                        <h3>Filipiniana</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="magazine-total-container">
+                    <div class="magazine-total">
+                        <h3>Magazine</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+            </div>
+            <!--END OF FIRST ROW-->
+            <!--SECOND ROW-->
+            <div class="book-conditions-container">
+                <div class="new-books-container">
+                    <div class="new-books-total">
+                        <h2>Newly Acquired</h2>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="for-repair-container">
+                    <div class="repair-total">
+                        <h2>For Repair</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+                <div class="for-giving-container">
+                    <div class="giving-total">
+                        <h2>Giving Away</h3>
+                        <h1>0</h1>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SECOND ROW-->
+            <!--THIRD ROW-->
+            <div>
+                <h1>Record Input</h1>
+            </div>
+            <div class="input-fields-container" id="fieldsContainer">
+                <form autocomplete="off" id="formBook">
+                    <div class="book-name">
+                        <label for="">Book Name</label>
                         <input type="text" name="bookName" id="bookName">
                     </div>
-                    <div>
-                        <label>Genre</label>
-                        <select name="bookGenre" id="bookGenre">
-                            <option value="Fiction">Fiction</option>
-                            <option value="Filipiniana">Filipiniana</option>
-                            <option value="Technology">Technology</option>
-                            <option value="Arts">Art</option>
-                            <option value="Humanities">Language</option>
-                            <option value="History">History</option>
-                        </select>
+                    <div class="author">
+                        <label for="">Author</label>
+                        <input type="text" name="authorName" id="authorName">
                     </div>
-                    <div>
-                        <label>Condition</label>
-                        <select name="bookCondition" id="bookCondition">
-                            <option value="New">Newly Acquired</option>
-                            <option value="Repair">Needs Repairing</option>
-                        </select>
-                    </div>
-                    <div class="from-action-buttons">
-                        <input type="submit" value="Submit">
+                    <div class="dropdowns-container">
+                        <div class="genre">
+                            <label>Genre</label>
+                            <select name="bookGenre" id="bookGenre">
+                                <option value="Fiction">Fiction</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Sciences">Sciences</option>
+                                <option value="Filipiniana">Filipiniana</option>
+                                <option value="Magazine">Magazine</option>
+                            </select>
+                        </div>
+                        <div class="condition">
+                            <label>Condition</label>
+                            <select name="bookCondition" id="bookCondition">
+                                <option value="New">Newly Acquired</option>
+                                <option value="Repair">Needs Repairing</option>
+                                <option value="Giving">Giving</option>
+                            </select>
+                        </div>
+                        <div class="status">
+                            <label>Status</label>
+                            <select name="bookStatus" id="bookStatus">
+                                <option value="Shelf">On Shelf</option>
+                                <option value="Repair">Borrowed</option>
+                            </select>
+                        </div>
+                        <div class="submit-button">
+                            <input type="submit" value="Submit" id="submitButton">
+                        </div>
                     </div>
                 </form>
-            </td>
-            <td>
+            </div>
+            <!--END OF THIRD ROW-->
+        </main>
+        <!--END OF MAIN-->
+        <!--RIGHT-->
+        <div class="right">
+            <div class="book-status-container">
+                <div class="book-records">
+                    <h1>Book Records</h1>
+                </div>
+                <div class="top">
+                    <div class="books-to-return">
+                        <h2>Books To Be Returned</h2>
+                        <h1>0</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="table-records">
                 <table class="list" id="bookList">
                     <thead>
+                        <th>ID</th>
                         <th>Book Name</th>
+                        <th>Author</th>
                         <th>Genre</th>
                         <th>Condition</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </thead>
                     <tbody>
-
+                        <!-- <tr>
+                            <td>ID</td>
+                            <td>Book</td>
+                            <td>Author Name</td>
+                            <td>Genre</td>
+                            <td>Condition</td>
+                            <td>Status</td>
+                            <td>
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr> -->
                     </tbody>
                 </table>
-            </td>
-        </tr>
-    </table>
-    <h2>Newly Acquired Books: <h2 id="newBooks">0</h2></h2>
-    <h2>Books Need Reparing: <h2 id="needRepair">0</h2></h2>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
