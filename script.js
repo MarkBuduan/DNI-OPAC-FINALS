@@ -1,109 +1,109 @@
-var newlyAcquired = 0
-var needRepairing = 0
-var selectedRow = null
+const formBook = document.getElementById("formBook");
+const inputBook = document.getElementById("bookName");
+const inputAuthor = document.getElementById("authorName");
+const inputGenre = document.getElementById("bookGenre");
+const inputCondition = document.getElementById("bookCondition");
+const inputStatus = document.getElementById("bookStatus");
+const tableBody = document.querySelector("#bookList tbody");
 
-function onFormSubmit() {
-    var formData = readFormData();
-    if (selectedRow == null)
-        insertNewRecord(formData);
-    else
-        updateRecord(formData)
-    resetForm();
-    newBooks.innerHTML = newlyAcquired
-    needRepair.innerHTML = needRepairing
-}
+const submit = document.getElementById("submit");
+const contIdEdit = document.getElementById("contIdEdit");
 
-function readFormData() {
-    var formData = {};
-    formData["bookName"] = document.getElementById("bookName").value;
-    formData["bookGenre"] = document.getElementById("bookGenre").value;
-    formData["bookCondition"] = document.getElementById("bookCondition").value;
-    if (formData["bookCondition"] == "New") {
-        newlyAcquired++
-    } else if (formData["bookCondition"] == "Repair"){
-        needRepairing++
+
+
+class Book {
+    constructor(id, book, author, genre, condition, status) {
+        this.id = id;
+        this.book = book;
+        this.author = author;
+        this.genre = genre;
+        this.condition = condition;
+        this.status = status;
+
     }
-    return formData;
-}
 
-function insertNewRecord(data) {
-    var table = document.getElementById("bookList").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow(table.length);
-    cell1 = newRow.insertCell(0);
-    cell1.innerHTML = data.bookName;
-    cell2 = newRow.insertCell(1);
-    cell2.innerHTML = data.bookGenre;
-    cell3 = newRow.insertCell(2);
-    cell3.innerHTML = data.bookCondition;
-    cell4 = newRow.insertCell(3);
-    cell4.innerHTML = '<p>On Shelf</p>'
-    cell5 = newRow.insertCell(4);
-    cell5.innerHTML = `<a onClick="onEdit(this)"> Edit</a>
-                       <a onClick="onDelete(this)"> Delete</a>
-                       <a onClick="onLend(this)"> Lend</a>`;
-    
-}
+    showData() {
+        Book.showHtml(this.id, this.book, this.author, this.genre, this.condition, this.status);
+        return this;
+    }
 
-function resetForm() {
-    document.getElementById("bookName").value = "";
-    document.getElementById("bookGenre").value = "";
-    document.getElementById("bookCondition").value = "";
-    selectedRow = null;
-}
+    storeBook() {
+        let allBook = JSON.parse(localStorage.getItem("books")) ?? [];
+        allBook.push({id:this.id, book:this.book, author:this.author, genre:this.genre, condition:this.condition, status:this.status})
+        localStorage.setItem("books", JSON.stringify(allBook))
 
-function onEdit(td) {
-    selectedRow = td.parentElement.parentElement;
-    document.getElementById("bookName").value = selectedRow.cells[0].innerHTML;
-    document.getElementById("bookGenre").value = selectedRow.cells[1].innerHTML;
-    document.getElementById("bookCondition").value = selectedRow.cells[2].innerHTML;
-}
+    }
 
-function updateRecord(formData) {
-    selectedRow.cells[0].innerHTML = formData.bookName;
-    selectedRow.cells[1].innerHTML = formData.bookGenre;
-    selectedRow.cells[2].innerHTML = formData.bookCondition;
+    static showAllBooks(){
+        if(localStorage.getItem("books")){
+            const arr = JSON.parse(localStorage.getItem("books"));
+            arr.forEach(function(item) {
+                Book.showHtml(item.id, item.book, item.author, item.genre, item.condition, item.status);
+            });
+        }
+    }
 
-    if (selectedRow.cells[2].innerHTML != "New") {
-        if (newlyAcquired != 0)
-            newlyAcquired--
-    } else if (selectedRow.cells[2].innerHTML != "Repair"){
-        if (needRepairing != 0)
-            needRepairing--
+    static showHtml(id, book, author, genre, condition, status) {
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `
+                        <tr>
+                            <td>${id}</td>
+                            <td>${book}</td>
+                            <td>${author}</td>
+                            <td>${genre}</td>
+                            <td>${condition}</td>
+                            <td>${status}</td>
+                            <td>
+                                <button class="edit">Edit</button>
+                                <button class="delete" data-id="${id}">Delete</button>
+                            </td>
+                        </tr>`
+        tableBody.appendChild(trEl);
     }
 }
 
-function onDelete(td) {
-    selectedRow = td.parentElement.parentElement;
-    if (selectedRow.cells[2].innerHTML == "New") {
-        if (newlyAcquired != 0)
-            newlyAcquired--
-    } else if (selectedRow.cells[2].innerHTML == "Repair"){
-        if (needRepairing != 0)
-            needRepairing--
-    }
-    if (confirm("Are you sure to delete this record?")) {
-        row = td.parentElement.parentElement;
-        document.getElementById("bookList").deleteRow(row.rowIndex);
-        resetForm();
-    }
-    newBooks.innerHTML = newlyAcquired
-    needRepair.innerHTML = needRepairing
-}
+Book.showAllBooks();
 
-function onLend(td) {
-    selectedRow = td.parentElement.parentElement;
-    selectedRow.cells[3].innerHTML = '<p>Borrowed</p>'
-    cell5.innerHTML = `<a onClick="onEdit(this)"> Edit</a>
-                       <a onClick="onDelete(this)"> Delete</a>
-                       <a onClick="onReturn(this)"> Return</a>`;
-    resetForm();
-}
+formBook.addEventListener("submit", (e)=> {
+    e.preventDefault();
 
-function onReturn(td) {
-    selectedRow = td.parentElement.parentElement;
-    selectedRow.cells[3].innerHTML = '<p>On Shelf</p>'
-    cell5.innerHTML = `<a onClick="onEdit(this)"> Edit</a>
-                       <a onClick="onDelete(this)"> Delete</a>
-                       <a onClick="onLend(this)"> Lend</a>`;
-    resetForm();
-}
+    let id = Math.floor(Math.random() * 1000);
+    const newBook = new Book(id, inputBook.value, inputAuthor.value, inputGenre.value, inputCondition.value, inputStatus.value);
+    newBook.showData().storeBook();
+
+    inputBook.value = "";
+    inputAuthor.value = "";
+    inputGenre.value = "";
+    inputCondition.value = "";
+    inputStatus.value = "";
+});
+
+tableBody.addEventListener("click", (e)=>{
+    if(e.target.classList.contains("delete")){
+        if(confirm("Are you sure you want to delete this record?")){
+            //remove from localstorage
+            let id = +e.target.getAttribute("data-id");
+            let bookItems = JSON.parse(localStorage.getItem("books"))
+            let newData = bookItems.filter(item=>item.id != id);
+            localStorage.setItem("books", JSON.stringify(newData))
+
+            //remove from html
+            e.target.parentElement.parentElement.remove();
+        }
+    }
+
+    if(e.target.classList.contains("edit")){
+            
+            let id = e.target.getAttribute("data-id");
+            let itemFind = JSON.parse(localStorage.getItem("books")).find(item => item.id == id);
+
+            inputBook.value = itemFind.book;
+            inputAuthor.value = itemFind.author;
+            inputGenre.value = itemFind.genre;
+            inputCondition.value = itemFind.condition;
+            inputStatus.value = itemFind.status;
+            contIdEdit.value = id;
+            submit.value = "Edit This Item";
+        
+    }
+})
