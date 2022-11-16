@@ -187,6 +187,7 @@ tableBody.addEventListener("click", (e)=>{
             e.target.parentElement.parentElement.remove();
 
         }
+        location.reload();
     }
 
     if(e.target.classList.contains("edit")){
