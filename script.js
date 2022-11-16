@@ -9,6 +9,23 @@ const tableBody = document.querySelector("#bookList tbody");
 const submitBtn = document.getElementById("submitButton");
 const contIdEdit = document.getElementById("contIdEdit");
 
+//Genre||Area
+let fictionCount = 0;
+let artCount = 0;
+let scienceCount = 0;
+let filipinianaCount = 0;
+let magazineCount = 0;
+
+let totalCount = fictionCount + artCount + scienceCount + filipinianaCount + magazineCount;
+
+//Condition
+let newCount = 0;
+let repairCount = 0;
+let giveCount = 0;
+
+//To Return
+let returnCount = 0;
+
 
 
 class Book {
@@ -39,15 +56,59 @@ class Book {
             const arr = JSON.parse(localStorage.getItem("books"));
             arr.forEach(function(item) {
                 Book.showHtml(item.id, item.book, item.author, item.genre, item.condition, item.status);
+                
+                //Book Counting Genre
+                if (item.genre == "Fiction"){
+                    fictionCount++;
+                } else if (item.genre == "Arts"){
+                    artCount++;
+                } else if (item.genre == "Sciences") {
+                    scienceCount++;
+                } else if (item.genre == "Filipiniana") {
+                    filipinianaCount++;
+                } else if (item.genre == "Magazine") {
+                    magazineCount++;
+                }
+
+                //Book Counting Condition
+                if (item.condition == "New"){
+                    newCount++;
+                } else if (item.condition == "Repair"){
+                    repairCount++;
+                } else if (item.condition == "Giving") {
+                    giveCount++;
+                }
+
+                //Book Return Counting
+                if (item.status == "Borrowed"){
+                    returnCount++;
+                } 
             });
+            
+            //Book Count Printing
+            document.getElementById("fictionId").innerHTML = fictionCount;
+            document.getElementById("artsId").innerHTML = artCount;
+            document.getElementById("sciencesId").innerHTML = scienceCount;
+            document.getElementById("filipinianaId").innerHTML = filipinianaCount;
+            document.getElementById("magazineId").innerHTML = magazineCount;
+
+            document.getElementById("totalId").innerHTML = fictionCount + artCount + scienceCount + filipinianaCount + magazineCount;
+
+            //Book Condition Count Printing
+            document.getElementById("newAcquireId").innerHTML = newCount;
+            document.getElementById("repairId").innerHTML = repairCount;
+            document.getElementById("giveId").innerHTML = giveCount;
+
+            //Book to Return Count Printing
+            document.getElementById("returnId").innerHTML = returnCount;
         }
     }
 
     //Update Book
-    updateBook(idParam) {
-        const newBookItem = {id: idParam, book:this.book, author:this.author, genre:this.genre, condition:this.condition, status:this.status};
+    updateBook(id) {
+        const newBookItem = {id: id, book:this.book, author:this.author, genre:this.genre, condition:this.condition, status:this.status};
         const UpdatedBookData = JSON.parse(localStorage.getItem("books")).map((item) => {
-            if(item.id == idParam) {
+            if(item.id == id) {
                 return newBookItem;
             }
             return item;
@@ -79,23 +140,30 @@ class Book {
 Book.showAllBooks();
 
 formBook.addEventListener("submit", (e)=> {
-    e.preventDefault();
+    //e.preventDefault();
+    console.log(contIdEdit.value);
 
     if(!contIdEdit.value) {
-        let id = Math.floor(Math.random() * 1000);
+        confirm("Record Added!");
+        const id = Math.floor(Math.random() * 1000);
         const newBook = new Book(id, inputBook.value, inputAuthor.value, inputGenre.value, inputCondition.value, inputStatus.value);
         newBook.showData().storeBook();
+
+        location.reload();
     
     } else {
-        const idToEdit = contIdEdit.value;
-        const updatedBook = new Book(idToEdit, inputBook.value, inputAuthor.value, inputGenre.value, inputCondition.value, inputStatus.value);
-        updatedBook.updateBook(idToEdit);
+        const id = contIdEdit.value;
+        const editBook = new Book(id, inputBook.value, inputAuthor.value, inputGenre.value, inputCondition.value, inputStatus.value);
+        editBook.updateBook(id);
 
         submitBtn.value = "Submit";
 
         tableBody.innerHTML = '';
         Book.showAllBooks();
-    }
+
+        location.reload();
+    
+    } 
 
     inputBook.value = "";
     inputAuthor.value = "";
@@ -117,6 +185,7 @@ tableBody.addEventListener("click", (e)=>{
 
             //remove from html
             e.target.parentElement.parentElement.remove();
+
         }
     }
 
@@ -132,7 +201,9 @@ tableBody.addEventListener("click", (e)=>{
             inputStatus.value = itemFind.status;
             contIdEdit.value = id;
 
-            submitBtn.value = "Edit";
-        
+            submitBtn.value = "Edit Record";
     }
+
+    
+
 })
